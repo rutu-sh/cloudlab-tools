@@ -30,12 +30,12 @@ cl-ssh-host: cl-verify
 
 install-go:
 	# Run this only when you have ssh'd into the cloudlab host
-	@echo "Installing Go on the cloudlab server..."
+	@echo "Installing Go..."
 	./scripts/install.sh install_go ${GO_VERSIN} ${GO_OS} ${GO_ARCH}
-	@echo "Go installed on the cloudlab server"
+	@echo "Go installed"
 
 install-ebpf-deps:
 	# Install eBPF on a linux machine
 	@echo "Installing eBPF dependencies..."
 	./scripts/install.sh install_ebpf_deps
-	@echo "eBPF dependencies installed"
+	@echo "eBPF dependencies installed!"
