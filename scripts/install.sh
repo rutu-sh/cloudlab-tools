@@ -26,5 +26,26 @@ function install_go {
     echo "Go ${version} has been installed!"
 }
 
+function install_ebpf_deps {
+
+    # check if the env is codespaces
+    local exec_env=$(uname -a)
+    local ver=$(uname -r)
+    if [[ $exec_env == *"codespaces"* ]]; then
+        # set ver to azure
+        ver="azure"
+    fi
+
+    echo "Setting up eBPF dependencies on the machine"
+    sudo apt-get update 
+    sudo apt install -y clang llvm libelf-dev libpcap-dev build-essential libc6-dev-i386
+    sudo apt install -y linux-tools-$(ver)
+    sudo apt install -y linux-headers-$(ver)
+    sudo apt install -y linux-tools-common linux-tools-generic
+    sudo apt install -y tcpdump
+    sudo apt install -y m4
+    sudo apt install -y libbpf-dev
+    echo "eBPF dependencies have been installed!"
+}
 
 "$@"
