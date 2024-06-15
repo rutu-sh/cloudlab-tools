@@ -28,13 +28,13 @@ cl-ssh-host: cl-verify
 	@echo "Connecting to the cloudlab host..."
 	ssh -i ~/gwu/gwu-cloud-lab ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}
 
-go-install:
+install-go:
 	# Run this only when you have ssh'd into the cloudlab host
 	@echo "Installing Go on the cloudlab server..."
 	./scripts/install.sh install_go ${GO_VERSIN} ${GO_OS} ${GO_ARCH}
 	@echo "Go installed on the cloudlab server"
 
-ebpf-install:
+install-ebpf-deps:
 	# Install eBPF on a linux machine
 	@echo "Installing eBPF dependencies..."
 	./scripts/install.sh install_ebpf_deps
