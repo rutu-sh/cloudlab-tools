@@ -1,4 +1,4 @@
-module ebpf-cloudlab/xdp-basic-01
+module ebpf-cloudlab/xdp-packet-counter
 
 go 1.22.0
 

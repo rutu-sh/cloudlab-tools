@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "bpf.h": "c",
+        "types.h": "c",
+        "stddef.h": "c",
+        "bpf_helpers.h": "c",
+        "bpf_common.h": "c",
+        "stdbool.h": "c"
+    }
+}
