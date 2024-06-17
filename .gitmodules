@@ -1,6 +1,0 @@
-[submodule "lib/libbpf"]
-	path = lib/libbpf
-	url = https://github.com/libbpf/libbpf.git
-[submodule "lib/kernel-headers"]
-	path = lib/kernel-headers
-	url = https://github.com/sabotage-linux/kernel-headers.git

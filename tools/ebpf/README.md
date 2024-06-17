@@ -58,8 +58,3 @@ source /etc/profile.d/go.sh
 
 Then you can go ahead, build, and run your eBPF code. 
 
-## Examples 
-
-| Example | Description | Reference | 
-| --- | --- | --- |
-| xdp-packet-counter | A simple eBPF program to count the packets arriving at the interface | [README](tools/ebpf/examples/xdp-packet-counter/README.md) |
