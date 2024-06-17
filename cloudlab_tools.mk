@@ -1,7 +1,14 @@
-ifeq ($(CL_CONFIG_PATH),)
-include cloudlab_config.mk
+CL_DIR?=${CURDIR}/.cloudlab
+CL_CONFIG_PATH=${CL_DIR}/cloudlab_config.mk
+CL_EXISTS=$(shell test -f $(CL_CONFIG_PATH) && echo 1 || echo 0)
+
+# Include the cloudlab configuration file
+ifeq ($(CL_EXISTS), 1)
+    include $(CL_CONFIG_PATH)
 else
-include $(CL_CONFIG_PATH)
+    $(shell mkdir -p $(CL_DIR))
+    $(shell cp scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
+    include $(CL_CONFIG_PATH)
 endif
 
 CLOUDLAB_HOST=$($(NODE))
