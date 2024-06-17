@@ -7,7 +7,7 @@ ifeq ($(CL_EXISTS), 1)
     include $(CL_CONFIG_PATH)
 else
     $(shell mkdir -p $(CL_DIR))
-    $(shell cp scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
+    $(shell cp ${CURDIR}/scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
     include $(CL_CONFIG_PATH)
 endif
 
