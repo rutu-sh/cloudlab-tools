@@ -22,7 +22,8 @@ load-igb-uio:
 	${CURDIR}/../../scripts/install.sh load_igb_uio_kmod && \
 	echo "igb_uio loaded!"
 
-setup:
+.PHONY: all
+all:
 	# Setup DPDK on a linux machine
 	@echo "Setting up DPDK..."
 	$(MAKE) install-dpdk-deps && \

@@ -13,7 +13,8 @@ install-ebpf-deps:
 	${CURDIR}/../../scripts/install.sh install_ebpf_deps && \
 	echo "eBPF dependencies installed!"
 
-setup:
+.PHONY: all
+all:
 	# Setup eBPF on a linux machine
 	@echo "Setting up eBPF..."
 	$(MAKE) install-ebpf-deps && \
