@@ -1,5 +1,8 @@
 # CloudLab configurations for Development Ease 
 
+# Local ssh-key path
+SSH_KEY_PATH=~/gwu/gwu-cloud-lab
+
 # User Configurations
 # Your Cloudlab Username
 CLOUDLAB_USERNAME=rutu_sh

@@ -1,47 +1,45 @@
-# ebpf-cloudlab
+# cloudlab-tools
 
-This repository contains the code and instructions to run the eBPF experiments on CloudLab. 
+This repository contains the necessary setup tools for working in CloudLab. The intention is to standardize and speed-up the process of setting up the cloudlab environment for various research projects. Though it is extensively used on cloudlab, it can be used to setup any linux machine. 
 
-The idea is to create a method/framework for running eBPF experiments on CloudLab. The framework should be able to run different eBPF programs on different network topologies and collect the results.
+This repository contains the setup scripts for the following tools: 
+1. [eBPF](tools/ebpf/README.md)
+2. [DPDK](tools/dpdk/README.md)
+3. [OpenNetVM](tools/onvm/README.md)
 
-## System Requirements
 
-- Go >= 1.22.0
-- Access to a Ubuntu >= 22.04 machine. I have used GitHub codespaces for this. If you have access to a local dev environment or a VM, that should work too. ( Any other linux machine should work too, most likely. )
+## Cloudlab Tools
 
-## Setting up the Development environment in GitHub Codespaces
+### Configuration
 
-This repository uses the [bpf2go](https://pkg.go.dev/github.com/cilium/ebpf/cmd/bpf2go) tool to compile and load eBPF programs. The `bpf2go` library generates the skeletal code for the eBPF program in Go. This means, even to write eBPF programs, you need to have access to a Linux machine. Here are the instructions for using `vscode` and `codespaces` to write eBPF programs.
+To access cloudlab easily, modify the `cloudlab_config.mk` as follows: 
 
-1. Fork this repository
-2. Create a new codespace for the forked repository
-3. Open vscode and load the codespace
-4. If you want to run the program in the codespace, you'll first have to install the dependencies for eBPF. Run the following commands in the terminal before you run `go generate` or `go build`. 
+```Makefile
+SSH_KEY_PATH = /path/to/your/ssh/key
+CLOUDLAB_USERNAME = your_cloudlab_username
+
+{NODE_ID_1}=your_cloudlab_node_host
+{NODE_ID_2}=your_cloudlab_node_host
+{NODE_ID_3}=your_cloudlab_node_host
+```
+
+### Usage 
+
+To rsync the repository code to the cloudlab node, run the following command: 
 
 ```bash
-make install-ebpf-deps
+make cl-sync-code {NODE_ID}
 ```
 
-To contribute to this repository, create a pull request with your changes. 
+This will sync the code to the ~/src directory by default. To specify the destination directory, run the following command: 
 
-
-## Setting up the development environment in CloudLab
-
-1. Instantiate a CloudLab profile having linux machines (I've only tested with Ubuntu 22.04). 
-2. `ssh` into the CloudLab Node
-3. Clone this repository
-4. Install dependencies
-```
-cd ebpf-cloudlab
-```
-```
-make install-ebpf-deps
-```
-```
-make install-go
-```
-```
-source /etc/profile.d/go.sh
+```bash
+make cl-sync-code {NODE_ID} REMOTE_DIR={DEST_DIR}
 ```
 
-Then you can go ahead, build, and run your eBPF code. 
+To ssh into the cloudlab node, run the following command: 
+
+```bash
+make cl-ssh-node {NODE_ID}
+```
+

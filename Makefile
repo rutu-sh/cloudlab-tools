@@ -1,10 +1,7 @@
 include cloudlab_config.mk
 
-GO_VERSIN=1.22.3
-GO_OS=linux
-GO_ARCH=amd64
-
 CLOUDLAB_HOST=$($(NODE))
+REMOTE_DIR?=~/src
 
 cl-verify:
 	@ # check if the CLOUDLAB_USERNAME is set
@@ -20,22 +17,10 @@ cl-verify:
 
 cl-sync-code: cl-verify
 	@echo "Syncing code to the cloudlab server..."
-	rsync -havpP -e "ssh -i '~/gwu/gwu-cloud-lab'" --exclude .git --exclude .venv --exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:~/src
+	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv --exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}
 	@echo "Code synced to the cloudlab server"
 
 
 cl-ssh-host: cl-verify
 	@echo "Connecting to the cloudlab host..."
-	ssh -i ~/gwu/gwu-cloud-lab ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}
-
-install-go:
-	# Run this only when you have ssh'd into the cloudlab host
-	@echo "Installing Go..."
-	./scripts/install.sh install_go ${GO_VERSIN} ${GO_OS} ${GO_ARCH}
-	@echo "Go installed"
-
-install-ebpf-deps:
-	# Install eBPF on a linux machine
-	@echo "Installing eBPF dependencies..."
-	./scripts/install.sh install_ebpf_deps
-	@echo "eBPF dependencies installed!"
+	ssh -i ${SSH_KEY_PATH} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}
