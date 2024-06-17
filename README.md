@@ -43,3 +43,8 @@ To ssh into the cloudlab node, run the following command:
 make cl-ssh-node {NODE_ID}
 ```
 
+To install docker, run the following command: 
+
+```bash
+make install-docker
+```

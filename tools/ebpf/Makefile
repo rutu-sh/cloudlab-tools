@@ -5,18 +5,18 @@ GO_ARCH=amd64
 install-go:
 	# Run this only when you have ssh'd into the cloudlab host
 	@echo "Installing Go..."
-	../../scripts/install.sh install_go ${GO_VERSIN} ${GO_OS} ${GO_ARCH}
-	@echo "Go installed"
+	../../scripts/install.sh install_go ${GO_VERSIN} ${GO_OS} ${GO_ARCH} && \
+	echo "Go installed"
 
 install-ebpf-deps:
 	# Install eBPF on a linux machine
 	@echo "Installing eBPF dependencies..."
-	../../scripts/install.sh install_ebpf_deps
-	@echo "eBPF dependencies installed!"
+	../../scripts/install.sh install_ebpf_deps && \
+	echo "eBPF dependencies installed!"
 
 setup:
 	# Setup eBPF on a linux machine
 	@echo "Setting up eBPF..."
+	$(MAKE) install-ebpf-deps && \
 	$(MAKE) install-go && \
-	$(MAKE) install-ebpf-deps
-	@echo "eBPF setup complete!"
+	echo "eBPF setup complete!"

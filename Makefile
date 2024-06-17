@@ -17,8 +17,9 @@ cl-verify:
 
 cl-sync-code: cl-verify
 	@echo "Syncing code to the cloudlab server..."
-	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv --exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}
-	@echo "Code synced to the cloudlab server"
+	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv \
+		--exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} && \
+	echo "Code synced to the cloudlab server"
 
 
 cl-ssh-host: cl-verify
