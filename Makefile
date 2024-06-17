@@ -1,4 +1,8 @@
+ifeq ($(CL_CONFIG_PATH),)
 include cloudlab_config.mk
+else
+include $(CL_CONFIG_PATH)
+endif
 
 CLOUDLAB_HOST=$($(NODE))
 REMOTE_DIR?=~/src
