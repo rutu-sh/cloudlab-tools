@@ -1,3 +1,13 @@
+.PHONY: all
+all:
+	# Setup DPDK on a linux machine
+	@echo "Setting up DPDK..."
+	$(MAKE) install-dpdk-deps && \
+	$(MAKE) allocate-hugepages && \
+	$(MAKE) build-dpdk && \
+	$(MAKE) load-igb-uio && \
+	echo "DPDK setup complete!"
+
 install-dpdk-deps:
 	# Install DPDK Dependencies on a linux machine
 	@echo "Installing DPDK dependencies..."
@@ -22,12 +32,3 @@ load-igb-uio:
 	${CURDIR}/../../scripts/install.sh load_igb_uio_kmod && \
 	echo "igb_uio loaded!"
 
-.PHONY: all
-all:
-	# Setup DPDK on a linux machine
-	@echo "Setting up DPDK..."
-	$(MAKE) install-dpdk-deps && \
-	$(MAKE) allocate-hugepages && \
-	$(MAKE) build-dpdk && \
-	$(MAKE) load-igb-uio && \
-	echo "DPDK setup complete!"
