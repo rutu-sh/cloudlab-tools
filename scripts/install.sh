@@ -11,7 +11,7 @@ function install_go {
     local go_profile="/etc/profile.d/go.sh"
     
     if [ -d "${go_dir}" ]; then
-        echo "Go is already installed!"
+        echo "Go is already installed! To start using Go, run: source ${HOME}/.profile"
         return
     fi
     
@@ -21,8 +21,9 @@ function install_go {
     rm "${go_tarball}" && \ 
     echo "Setting up Go environment" && \
     echo "export PATH=\$PATH:${go_bin_dir}" | sudo tee -a "${go_profile}" > /dev/null && \
+    echo "export PATH=\$PATH:${go_bin_dir}" | sudo tee -a "${HOME}/.profile" > /dev/null && \
     source "${go_profile}" && \
-    echo "Go ${version} has been installed!"
+    echo "Go ${version} has been installed! To start using Go, run: source ${HOME}/.profile"
 }
 
 function install_ebpf_deps {
