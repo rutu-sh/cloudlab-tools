@@ -16,7 +16,7 @@ This repository contains the setup scripts for the following tools:
     - Physical Node Type: c220g2/c220g5 
     - OS Image: Ubuntu 22.04
 3. Wait for the experiment to be ready. Once the experiment is ready, cloudlab will show the status as "ready". 
-4. Copy the public IP address of the node (ex: `c220g2-010606.wisc.cloudlab.us`, `c220g2-010608.wisc.cloudlab.us`, etc) and paste it to the `cloudlab_config.mk` in the format `NODE_NAME=<public_ip>`. Example: 
+4. Copy the public IP address of the node (ex: `c220g2-010606.wisc.cloudlab.us`, `c220g2-010608.wisc.cloudlab.us`, etc) and paste it to the `.cloudlab/cloudlab_config.mk` in the format `NODE_NAME=<public_ip>`. Example: 
 ```makefile
 # Node 1
 NODE_0=c220g2-010606.wisc.cloudlab.us
@@ -27,8 +27,8 @@ NODE_1=c220g2-010608.wisc.cloudlab.us
 # Node 2
 NODE_2=c220g2-010604.wisc.cloudlab.us
 ```
-5. Update the `CLOUDLAB_USERNAME` in the `cloudlab_config.mk` file with your CloudLab username.
-6. Update the `SSH_KEY_PATH` in the `cloudlab_config.mk` file with the path to your SSH private key.
+5. Update the `CLOUDLAB_USERNAME` in the `.cloudlab/cloudlab_config.mk` file with your CloudLab username.
+6. Update the `SSH_KEY_PATH` in the `.cloudlab/cloudlab_config.mk` file with the path to your SSH private key.
 
 
 ### Syncing code to the cloudlab node 
