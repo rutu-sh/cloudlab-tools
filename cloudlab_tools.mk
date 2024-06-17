@@ -1,3 +1,4 @@
+TOOLS_SRC_DIR?=${CURDIR}
 CL_DIR?=${CURDIR}/.cloudlab
 CL_CONFIG_PATH=${CL_DIR}/cloudlab_config.mk
 CL_EXISTS=$(shell test -f $(CL_CONFIG_PATH) && echo 1 || echo 0)
@@ -7,7 +8,7 @@ ifeq ($(CL_EXISTS), 1)
     include $(CL_CONFIG_PATH)
 else
     $(shell mkdir -p $(CL_DIR))
-    $(shell cp ${CURDIR}/scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
+    $(shell cp ${TOOLS_SRC_DIR}/scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
     include $(CL_CONFIG_PATH)
 endif
 
