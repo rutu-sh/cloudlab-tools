@@ -13,3 +13,10 @@ install-ebpf-deps:
 	@echo "Installing eBPF dependencies..."
 	../../scripts/install.sh install_ebpf_deps
 	@echo "eBPF dependencies installed!"
+
+setup:
+	# Setup eBPF on a linux machine
+	@echo "Setting up eBPF..."
+	$(MAKE) install-go && \
+	$(MAKE) install-ebpf-deps
+	@echo "eBPF setup complete!"

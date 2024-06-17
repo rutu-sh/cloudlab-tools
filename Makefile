@@ -24,3 +24,10 @@ cl-sync-code: cl-verify
 cl-ssh-host: cl-verify
 	@echo "Connecting to the cloudlab host..."
 	ssh -i ${SSH_KEY_PATH} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}
+
+
+install-docker:
+	@echo "Installing Docker..."
+	./scripts/install.sh install_docker && \
+	echo "Docker installed"
+
