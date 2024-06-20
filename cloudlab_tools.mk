@@ -16,6 +16,9 @@ endif
 CLOUDLAB_HOST=$($(NODE))
 REMOTE_DIR?=~/src
 
+# get project name - last part of the current directory
+REMOTE_SUBDIR?=$(shell basename ${CURDIR})
+
 cl-verify:
 	@ # check if the CLOUDLAB_USERNAME is set
 	@if [ -z ${CLOUDLAB_USERNAME} ]; then \
@@ -34,6 +37,16 @@ cl-sync-code: cl-verify
 		--exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} && \
 	echo "Code synced to the cloudlab server"
 
+cl-sync-from-host: cl-verify
+	@echo "Syncing code from the cloudlab server..."
+	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv --exclude .cloudlab \
+		--exclude .vscode ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}/${REMOTE_SUBDIR} ${CURDIR} && \
+	echo "Code synced from the cloudlab server"
+
+
+cl-run-cmd: cl-verify
+	@echo "Running command on the cloudlab host..."
+	ssh -i ${SSH_KEY_PATH} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST} "${COMMAND}"
 
 cl-ssh-host: cl-verify
 	@echo "Connecting to the cloudlab host..."

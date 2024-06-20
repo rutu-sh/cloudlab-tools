@@ -61,6 +61,27 @@ To scp files from the cloudlab node, run the following command:
 make cl-scp-from-host REMOTE_DIR=<path-to-remote-dir> SCP_DEST=<path-to-local-dir> NODE=<node-id>
 ```
 
+### Syncing code from the cloudlab node
+
+To rsync from the cloudlab node to the local machine, run the following command: 
+
+```bash
+make cl-sync-from-host NODE=NODE_0
+```
+This copies the code from `~/src/<project>` to the local machine. To specify the source directory, run the following command: 
+
+```bash
+make cl-sync-from-host NODE=NODE_0 REMOTE_DIR=<remote-dir> REMOTE_SUBDIR=<remote-subdir>
+```
+
+### Running commands on the cloudlab node
+
+To run a command on the cloudlab node, run the following command: 
+
+```bash
+make cl-run-cmd NODE=<node-id> COMMAND=<command>
+```
+
 ## Using this Repository as a Submodule
 
 For building your own projects with the help of CloudLab, it is recommended to add this repository as a submodule to your project. This will allow you to keep the setup tools in sync with the latest changes. Here are the steps to add this repository as a submodule:
