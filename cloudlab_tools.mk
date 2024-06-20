@@ -2,6 +2,7 @@ TOOLS_SRC_DIR?=${CURDIR}
 CL_DIR?=${CURDIR}/.cloudlab
 CL_CONFIG_PATH=${CL_DIR}/cloudlab_config.mk
 CL_EXISTS=$(shell test -f $(CL_CONFIG_PATH) && echo 1 || echo 0)
+SCP_DEST?=${CURDIR}
 
 # Include the cloudlab configuration file
 ifeq ($(CL_EXISTS), 1)
@@ -37,3 +38,12 @@ cl-sync-code: cl-verify
 cl-ssh-host: cl-verify
 	@echo "Connecting to the cloudlab host..."
 	ssh -i ${SSH_KEY_PATH} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}
+
+
+cl-scp-from-host: cl-verify
+	@echo "Copying files from the cloudlab host..."
+	scp -i ${SSH_KEY_PATH} -r ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} ${SCP_DEST} && \
+	echo "Files copied from the cloudlab host"
+
+cl-setup:
+	@echo "setting up cloudlab configurations..."

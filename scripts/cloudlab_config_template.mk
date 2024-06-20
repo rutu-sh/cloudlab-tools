@@ -1,4 +1,6 @@
-# CloudLab configurations for Development Ease 
+# CloudLab configurations for Development Ease
+# NOTE: This file is a template. Please fill in the required fields and rename the file to cloudlab_config.mk
+# NOTE: Remove trailing whitespaces from the field values
 
 # Local ssh-key path
 SSH_KEY_PATH=
