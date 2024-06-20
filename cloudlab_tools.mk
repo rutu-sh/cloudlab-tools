@@ -15,6 +15,7 @@ endif
 
 CLOUDLAB_HOST=$($(NODE))
 REMOTE_DIR?=~/src
+SCP_SRC?=${REMOTE_DIR}
 
 # get project name - last part of the current directory
 REMOTE_SUBDIR?=$(shell basename ${CURDIR})
@@ -43,7 +44,6 @@ cl-sync-from-host: cl-verify
 		--exclude .vscode ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}/${REMOTE_SUBDIR} ${CURDIR} && \
 	echo "Code synced from the cloudlab server"
 
-
 cl-run-cmd: cl-verify
 	@echo "Running command on the cloudlab host..."
 	ssh -i ${SSH_KEY_PATH} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST} "${COMMAND}"
@@ -55,7 +55,7 @@ cl-ssh-host: cl-verify
 
 cl-scp-from-host: cl-verify
 	@echo "Copying files from the cloudlab host..."
-	scp -i ${SSH_KEY_PATH} -r ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} ${SCP_DEST} && \
+	scp -i ${SSH_KEY_PATH} -r ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${SCP_SRC} ${SCP_DEST} && \
 	echo "Files copied from the cloudlab host"
 
 cl-setup:

@@ -58,7 +58,7 @@ make cl-ssh-node NODE={NODE_ID}
 To scp files from the cloudlab node, run the following command: 
 
 ```bash
-make cl-scp-from-host REMOTE_DIR=<path-to-remote-dir> SCP_DEST=<path-to-local-dir> NODE=<node-id>
+make cl-scp-from-host SCP_SRC=<path-to-remote-source> SCP_DEST=<path-to-local-dest> NODE=<node-id>
 ```
 
 ### Syncing code from the cloudlab node
