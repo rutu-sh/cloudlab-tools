@@ -38,8 +38,8 @@ function install_ebpf_deps {
 
     echo "Setting up eBPF dependencies on the machine"
     sudo apt-get update && \
-    sudo apt install -y clang llvm libelf-dev libpcap-dev build-essential libc6-dev-i386 linux-tools-$(ver) \
-        linux-headers-$(ver) linux-tools-common linux-tools-generic tcpdump m4 libbpf-dev && \
+    sudo apt install -y clang llvm libelf-dev libpcap-dev build-essential libc6-dev-i386 linux-tools-${ver} \
+        linux-headers-${ver} linux-tools-common linux-tools-generic tcpdump m4 libbpf-dev && \
     echo "eBPF dependencies have been installed!"
 }
 
