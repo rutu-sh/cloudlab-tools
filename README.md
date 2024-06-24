@@ -50,7 +50,7 @@ make cl-sync-code NODE={NODE_ID} REMOTE_DIR={DEST_DIR}
 To ssh into the cloudlab node, run the following command: 
 
 ```bash
-make cl-ssh-node NODE={NODE_ID}
+make cl-ssh-host NODE={NODE_ID}
 ```
 
 ### SCP files from the cloudlab node
