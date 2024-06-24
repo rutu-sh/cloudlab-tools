@@ -1,5 +1,7 @@
 # cloudlab-tools
 
+![](./docs/assets/cloudlab-ebpf.svg)
+
 This repository contains the necessary setup tools for working in CloudLab. The intention is to standardize and speed-up the process of setting up the cloudlab environment for various research projects. Though it is extensively used on cloudlab, it can be used to setup any linux machine. Use it as a standalone setup tool for your experiments or import it as a submodule in your repository.
 
 This repository contains the setup scripts for the following tools: 
