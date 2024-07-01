@@ -102,4 +102,35 @@ function install_docker {
     sudo usermod -aG docker $USER
 }
 
+function install_kubernetes {
+    install_docker 
+    wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
+    sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
+    sudo systemctl enable cri-dockerd && \
+    sudo systemctl start cri-dockerd && \
+    sudo swapoff -a && \
+    sudo apt-get update && \
+    sudo apt-get install -y apt-transport-https ca-certificates curl gpg && \
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list 
+    sudo apt-get update
+    sudo apt-get install -y kubelet kubeadm kubectl
+    sudo systemctl enable --now kubelet
+    echo "Kubernetes setup complete!"
+}
+
+function init_k8s_master_node {
+    install_kubernetes
+    kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+}
+
+function init_k8s_worker_node {
+    install_kubernetes
+}
+
 "$@"
