@@ -103,14 +103,14 @@ function install_docker {
 }
 
 function install_kubernetes {
-    install_docker 
+    install_docker
     wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
     sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
-    sudo systemctl enable cri-dockerd && \
-    sudo systemctl start cri-dockerd && \
+    sudo systemctl enable cri-docker && \
+    sudo systemctl start cri-docker && \
     sudo swapoff -a && \
     sudo apt-get update && \
-    sudo apt-get install -y apt-transport-https ca-certificates curl gpg && \
+    sudo apt-get install -y apt-transport-https ca-certificates curl gpg 
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list 
     sudo apt-get update
@@ -120,8 +120,13 @@ function install_kubernetes {
 }
 
 function init_k8s_master_node {
+    local node_name=$1
+    if [ -z "${node_name}" ]; then
+        echo "Node name is required!"
+        exit 1
+    fi
     install_kubernetes
-    kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16
+    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name}
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
