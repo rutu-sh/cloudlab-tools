@@ -104,11 +104,11 @@ function install_docker {
 
 function install_kubernetes {
     install_docker
+    sudo swapoff -a
     wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
     sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
     sudo systemctl enable cri-docker && \
     sudo systemctl start cri-docker && \
-    sudo swapoff -a && \
     sudo apt-get update &> /dev/null && \
     sudo apt-get install -y apt-transport-https ca-certificates curl gpg &> /dev/null
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
