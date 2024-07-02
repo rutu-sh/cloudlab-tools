@@ -87,34 +87,34 @@ function load_igb_uio_kmod {
 function install_docker {
     # TODO: Add support for other distros
     local os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
-    sudo apt-get update && \
-    sudo apt-get install -y ca-certificates curl && \
-    sudo install -m 0755 -d /etc/apt/keyrings && \
+    sudo apt-get update &> /dev/null && \
+    sudo apt-get install -y ca-certificates curl &> /dev/null && \
+    sudo install -m 0755 -d /etc/apt/keyrings &> /dev/null && \
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
     sudo chmod a+r /etc/apt/keyrings/docker.asc && \
     echo \
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    sudo apt-get update && \
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+    sudo apt-get update &> /dev/null && \
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose &> /dev/null
 
     sudo usermod -aG docker $USER
 }
 
 function install_kubernetes {
     install_docker
-    wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
-    sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb && \
+    wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
+    sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
     sudo systemctl enable cri-docker && \
     sudo systemctl start cri-docker && \
     sudo swapoff -a && \
-    sudo apt-get update && \
-    sudo apt-get install -y apt-transport-https ca-certificates curl gpg 
+    sudo apt-get update &> /dev/null && \
+    sudo apt-get install -y apt-transport-https ca-certificates curl gpg &> /dev/null
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list 
-    sudo apt-get update
-    sudo apt-get install -y kubelet kubeadm kubectl
+    sudo apt-get update &> /dev/null 
+    sudo apt-get install -y kubelet kubeadm kubectl &> /dev/null
     sudo systemctl enable --now kubelet
     echo "Kubernetes setup complete!"
 }
