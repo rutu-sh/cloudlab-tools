@@ -9,6 +9,7 @@ This repository contains the setup scripts for the following tools:
 2. [eBPF](tools/ebpf/README.md) - contains setup tools for eBPF.
 3. [DPDK](tools/dpdk/README.md) - contains setup tools for DPDK.
 4. [OpenNetVM](tools/onvm/README.md) - contains setup tools for OpenNetVM.
+5. [Kubernetes](tools/kubernetes/README.md) - contains setup tools for Kubernetes. 
 
 ## Setting up CloudLab 
 
