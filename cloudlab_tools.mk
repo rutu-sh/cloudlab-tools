@@ -13,6 +13,10 @@ else
     include $(CL_CONFIG_PATH)
 endif
 
+# if ${SYNC_EXCLUDE_FROM} is not empty, then add the exclude flag to the rsync command
+# SYNC_EXCLUDE_FROM is a file that contains the list of files to exclude
+SYNC_EXCLUDE_FLAG?=$(if ${SYNC_EXCLUDE_FROM}, --exclude-from=${SYNC_EXCLUDE_FROM},)
+
 CLOUDLAB_HOST=$($(NODE))
 REMOTE_DIR?=~/src
 SCP_SRC?=${REMOTE_DIR}
@@ -35,13 +39,13 @@ cl-verify:
 cl-sync-code: cl-verify
 	@echo "Syncing code to the cloudlab server..."
 	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv \
-		--exclude .vscode ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} && \
+		--exclude .vscode ${SYNC_EXCLUDE_FLAG} ${CURDIR} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR} && \
 	echo "Code synced to the cloudlab server"
 
 cl-sync-from-host: cl-verify
 	@echo "Syncing code from the cloudlab server..."
 	rsync -havpP -e "ssh -i '${SSH_KEY_PATH}'" --exclude .git --exclude .venv --exclude .cloudlab \
-		--exclude .vscode ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}/${REMOTE_SUBDIR} ${CURDIR} && \
+		--exclude .vscode ${SYNC_EXCLUDE_FLAG} ${CLOUDLAB_USERNAME}@${CLOUDLAB_HOST}:${REMOTE_DIR}/${REMOTE_SUBDIR} ${CURDIR} && \
 	echo "Code synced from the cloudlab server"
 
 cl-run-cmd: cl-verify
