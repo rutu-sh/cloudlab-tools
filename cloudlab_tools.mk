@@ -10,6 +10,7 @@ ifeq ($(CL_EXISTS), 1)
 else
     $(shell mkdir -p $(CL_DIR))
     $(shell cp ${TOOLS_SRC_DIR}/scripts/cloudlab_config_template.mk $(CL_CONFIG_PATH))
+	$(shell touch $(CL_DIR)/sync-exclude)
     include $(CL_CONFIG_PATH)
 endif
 
