@@ -126,9 +126,7 @@ function init_k8s_master_node {
         exit 1
     fi
     install_kubernetes
-    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name} --apiserver-advertise-address=$(hostname -I | awk '{print $2}')
-    ## --apiserver-advertise-address=$(hostname -I | awk '{print $2}') is used to set the IP address of the master node, in cloudlab the default IP is the public IP
-    ## instead we want to use the private IP
+    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name} 
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
