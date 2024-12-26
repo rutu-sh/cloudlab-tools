@@ -121,14 +121,22 @@ function install_kubernetes {
 
 function init_k8s_master_node {
     local node_name=$1
+    local localip=$(hostname -I | awk '{print $2}')
+    local publicip=$(hostname -I | awk '{print $1}')
+
     if [ -z "${node_name}" ]; then
         echo "Node name is required!"
         exit 1
     fi
     install_kubernetes
-    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name} 
+
+    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name} --apiserver-advertise-address=${localip} --apiserver-cert-extra-sans=${publicip} 
+    ## --apiserver-advertise-address=$(hostname -I | awk '{print $2}') is used to set the IP address of the master node, in cloudlab the default IP is the public IP
+    ## instead we want to use the private IP
+    sudo ufw allow 6443/tcp
     mkdir -p $HOME/.kube
-    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config 
+    sed -i -e "s/$(hostname -I | awk '{print $2}')/$(hostname -I | awk '{print $1}')/g" $HOME/.kube/config 
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
