@@ -85,65 +85,32 @@ function load_igb_uio_kmod {
 }
 
 function install_docker {
-    # TODO: Add support for other distros
-    local os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
-    sudo apt-get update &> /dev/null && \
-    sudo apt-get install -y ca-certificates curl &> /dev/null && \
-    sudo install -m 0755 -d /etc/apt/keyrings &> /dev/null && \
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
-    sudo chmod a+r /etc/apt/keyrings/docker.asc && \
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    sudo apt-get update &> /dev/null && \
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose &> /dev/null
+    local tools_root=$1
 
-    sudo usermod -aG docker $USER
+    ${tools_root}/scripts/docker.sh install_docker ${tools_root}
+
 }
 
 function install_kubernetes {
-    install_docker
-    sudo swapoff -a
-    wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
-    sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb &> /dev/null && \
-    sudo systemctl enable cri-docker && \
-    sudo systemctl start cri-docker && \
-    sudo apt-get update &> /dev/null && \
-    sudo apt-get install -y apt-transport-https ca-certificates curl gpg &> /dev/null
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list 
-    sudo apt-get update &> /dev/null 
-    sudo apt-get install -y kubelet kubeadm kubectl &> /dev/null
-    sudo systemctl enable --now kubelet
-    echo "Kubernetes setup complete!"
+    local tools_root=$1
+
+    install_docker ${tools_root}
+    ${tools_root}/scripts/kubernetes.sh install_kubernetes
+
 }
 
 function init_k8s_master_node {
-    local node_name=$1
-    local localip=$(hostname -I | awk '{print $2}')
-    local publicip=$(hostname -I | awk '{print $1}')
+    local tools_root=$1
 
-    if [ -z "${node_name}" ]; then
-        echo "Node name is required!"
-        exit 1
-    fi
-    install_kubernetes
-
-    sudo kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16 --node-name=${node_name} --apiserver-advertise-address=${localip} --apiserver-cert-extra-sans=${publicip} 
-    ## --apiserver-advertise-address=$(hostname -I | awk '{print $2}') is used to set the IP address of the master node, in cloudlab the default IP is the public IP
-    ## instead we want to use the private IP
-    sudo ufw allow 6443/tcp
-    mkdir -p $HOME/.kube
-    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config 
-    sed -i -e "s/$(hostname -I | awk '{print $2}')/$(hostname -I | awk '{print $1}')/g" $HOME/.kube/config 
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
-    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+    install_docker ${tools_root}
+    ${tools_root}/scripts/kubernetes.sh init_k8s_master_node
 }
 
 function init_k8s_worker_node {
-    install_kubernetes
+    local tools_root=$1
+
+    install_docker ${tools_root}
+    ${tools_root}/scripts/kubernetes.sh init_k8s_worker_node
 }
 
 function install_k6 {

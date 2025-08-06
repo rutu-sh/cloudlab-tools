@@ -4,7 +4,7 @@ GO_ARCH?=amd64
 
 install-docker:
 	@echo "Installing Docker..."
-	${CURDIR}/../../scripts/install.sh install_docker && \
+	${CURDIR}/../../scripts/docker.sh install_docker ${CURDIR}/../../configs && \
 	echo "Docker installed"
 
 install-go:
