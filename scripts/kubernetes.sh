@@ -90,7 +90,10 @@ function init_k8s_master_node {
 
     helm repo add cilium https://helm.cilium.io/
 
-    helm install cilium cilium/cilium --version 1.18.0 --namespace kube-system 
+    helm install cilium cilium/cilium --version 1.18.0 \
+        --namespace kube-system \
+        --set socketLB.hostNamespaceOnly=true \
+        --set cni.exclusive=false
 
     sudo cp ${HOME}/.kube/config ${HOME}/.kubeconfig
     sudo chown "$(id -u):$(id -g)" "$HOME/.kubeconfig"
