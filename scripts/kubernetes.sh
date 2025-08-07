@@ -81,8 +81,7 @@ function init_k8s_master_node {
         --pod-network-cidr=192.168.0.0/16 \
         --node-name=master \
         --apiserver-advertise-address=${localip} \
-        --apiserver-cert-extra-sans=${publicip} \
-        --skip-phases=addon/kube-proxy
+        --apiserver-cert-extra-sans=${publicip} 
 
 
     mkdir -p $HOME/.kube
@@ -91,12 +90,7 @@ function init_k8s_master_node {
 
     helm repo add cilium https://helm.cilium.io/
 
-    helm install cilium cilium/cilium --version 1.18.0 \
-        --namespace kube-system \
-        --set kubeProxyReplacement=true \
-        --set k8sServiceHost=${localip} \
-        --set k8sServicePort=6443
-
+    helm install cilium cilium/cilium --version 1.18.0 --namespace kube-system 
 
     sudo cp ${HOME}/.kube/config ${HOME}/.kubeconfig
     sudo chown "$(id -u):$(id -g)" "$HOME/.kubeconfig"
